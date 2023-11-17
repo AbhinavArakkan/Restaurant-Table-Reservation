@@ -1,0 +1,40 @@
+
+{% extends 'reservation/base.html' %}
+
+{% load static %}
+
+
+{% block title %}Profile{% endblock %}
+
+{% block styles %}
+    {{ block.super }}
+    <!-- Include additional styles if needed -->
+    <!-- Example: <link rel="stylesheet" href="{% static 'path/to/your/page/styles.css' %}"> -->
+{% endblock %}
+
+{% block content %}
+
+
+<h2>{{ user_profile.user.username }}</h2>
+{% if user_profile.profile_photo %}
+  <img src="{{ user_profile.profile_photo.url }}" alt="Profile Photo">
+  <p><a href="{% url 'change_profile_photo' %}">Change Profile Photo</a></p>
+{% else %}
+  <p>No profile photo</p>
+  <p><a href="{% url 'upload_profile_photo' %}">Upload Profile Photo</a></p>
+{% endif %}
+
+<h3>Reservations:</h3>
+{% for reservation in user_reservations %}
+  <p>Reservation Date: {{ reservation.reservation_date }}</p>
+  <p>Reservation Time: {{ reservation.reservation_time }}</p>
+  <p>Seats: {{ reservation.seats }}</p>
+  <!-- Add other reservation details as needed -->
+{% endfor %}
+{% endblock %}
+
+{% block scripts %}
+    {{ block.super }}
+    <!-- Include additional scripts if needed -->
+    <!-- Example: <script src="{% static 'path/to/your/page/script.js' %}"></script> -->
+{% endblock %}
