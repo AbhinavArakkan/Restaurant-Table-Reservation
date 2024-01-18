@@ -1,0 +1,165 @@
+{% load static %}
+   <style>
+
+        .images {
+            object-fit: cover;
+            width: 100%;
+            height: 25vw;
+            background: url("{% static 'image/online-reservation.jpg' %}") center/cover no-repeat fixed;
+            margin-top: 150px;
+            background-attachment: fixed;
+            background-position: center;
+            background-repeat: no-repeat;
+            background-size: cover;
+            position: relative;
+        }
+
+        .H {
+            position: relative;
+            margin-left: 50%;
+            text-align: center;
+            color: #fff;
+            width: 30%;
+            padding-top: 30px;
+            transform: translate(40%, 10%);
+        }
+
+        .H1 {
+            font-size: 1vw;
+            font-family: Bradley Hand, cursive;
+            font-weight: lighter;
+            color: #ffffffc3;
+            margin-bottom: 5px;
+        }
+
+        .H2 {
+            font-size: 3vw;
+            margin-bottom: 15px;
+            font-family: Comic Sans MS, Comic Sans, cursive;
+            font-weight: bold;
+            line-height: 1;
+            letter-spacing: 2px;
+        }
+
+        .H3 {
+            font-size: 1vw;
+            font-family: Bradley Hand, cursive;
+            margin-bottom: 20px;
+            color: #ffffffc3;
+        }
+
+        .golden-line {
+            transform: translate(50%);
+            height: .1vw;
+            width: 15vw;
+            background-color: #ca9c5e;
+        }
+
+        .H-reservation {
+            padding: 15px 20px;
+            display: inline-block;
+            z-index: 1;
+            font-size: 1.3vw;
+            letter-spacing: 2px;
+        }
+
+        @media (max-width: 1180px) {
+            .images{
+                height: 30vw;
+            }
+            .H1{
+                font-size: 1.3vw;
+            }
+            .H2{
+                font-size: 3.5vw;
+            }
+            .H3{
+                font-size: 1.3vw;
+            }
+        }
+
+        @media (max-width: 900px) {
+            .images{
+                height: 35vw;
+            }
+        }
+
+        @media (max-width: 700px) {
+            .H1{
+                margin-top: -15px;
+            }
+            .images{
+                height: 40vw;
+            }
+        }
+
+        @media (max-width: 500px) {
+            .images{
+                height: 45vw;
+            }
+            .H{
+                transform: translate(-50%, 10%);
+                width: 40%;
+            }
+            .H1{
+                font-size: 1.6vw;
+            }
+            .H2{
+                font-size: 4vw;
+            }
+            .H3{
+                font-size: 1.6vw;
+            }
+            .golden-line{
+                transform: translate(75%);
+            }
+            .H-reservation {
+            padding: 10px 20px;
+            }
+        }
+
+        a {
+            color: #fff;
+            text-decoration: none;
+        }
+
+        .online-left-image,
+        .online-right-image {
+            position: relative;
+        }
+
+        .online-left-image {
+            left: -10%;
+            z-index: 1;
+            width: 25%;
+            top: -130%;
+        }
+
+        .online-right-image {
+            right: 0; /* Adjust the right positioning */
+            transform: translate(434%, -55%);
+            z-index: 1;
+            width: 14%;
+        }
+
+        @media (max-width: 700px) {
+            .online-right-image {
+                transform: translate(430%, -55%);
+            }
+        }
+
+    </style>
+<body>
+    <div class="images">
+        <div class="H">
+            <div class="H1">WE SAVED YOU A SEAT</div>
+            <div class="H2">Make an online<br>Reservation</div>
+            <div class="H3">When the going gets tough, the tough get grilling. Bringing heat to your meat. No one can compete with our meat</div>
+            <div class="golden-line"></div>
+            <div class="H-reservation"><a href="{% url 'reservation' %}">RESERVATION</a></div>
+            <div class="golden-line"></div>
+        </div>
+        <img src="{% static 'image/online-left.png' %}" class="online-left-image">
+        <img src="{% static 'image/Online-right.png' %}" class="online-right-image">
+    </div>
+</body>

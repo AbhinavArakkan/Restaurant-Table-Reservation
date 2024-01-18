@@ -1,0 +1,172 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Register</title>
+    <style>
+        body {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+            background-color: #0b1517;
+            overflow-x: hidden;
+        }
+
+        body::-webkit-scrollbar {
+            display: none;
+        }
+
+        main {
+            width: 40%;
+            padding: 20px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            border-radius: 8px;
+            color: #ca9c5e; /* Text color for better contrast */
+        }
+
+        form {
+            display: flex;
+            flex-direction: column;
+            width: 90%;
+        }
+
+        label {
+            margin-bottom: 8px;
+            font-size: 18px; /* Increase font size for labels */
+        }
+
+        input {
+            padding: 10px;
+            margin-bottom: 16px;
+            color: #ca9c5e; /* Red text color */
+            border: 1px solid #865439;/* White border */
+            background-color: transparent; /* Remove fill color */
+        }
+
+        input[type="submit"] {
+            background-color: #ca9c5e;
+            color: #fff;
+            cursor: pointer;
+            font-size: 16px;
+            align-self: flex-end;
+            width: 40%;
+        }
+
+        input[type="submit"]:hover {
+            background-color: #865439;
+            font-weight: bold;
+        }
+
+        img {
+            width: 70%;
+            height: 80%;
+            object-fit: cover;
+        }
+
+        .signin {
+            margin-top: 8px;
+            color: #995835;
+            font-size: 14px; /* Decrease font size for the message */
+            margin-top: -10px;
+            margin-bottom: 10px;
+        }
+
+        .signin a {
+            color: #ca9c5e;
+            text-decoration: underline;
+            cursor: pointer;
+            font-size: 14px; /* Decrease font size for the link */
+        }
+
+        .logo {
+            display: none;
+        }
+
+
+        @media (max-width: 800px) {
+            img {
+                width: 50%
+            }
+        }
+
+        @media (max-width: 500px) {
+            img{
+                display: none;
+            }
+
+            .logo {
+                display: block;
+                width: 70vw;
+                padding-top: 10px;
+                margin-bottom: -60px;
+                margin-left: -20px;
+            }
+
+            main {
+                width: 80%;
+            }
+
+            label {
+            font-size: 4vw;
+            margin-top: -4px;
+            }
+
+            input {
+                padding: 2vw;
+            }
+
+            .signin {
+                margin-top: 8px;
+                color: #995835;
+                font-size: 3.5vw;
+                margin-top: -10px;
+                margin-bottom: 10px;
+            }
+
+            .signin a {
+                color: #ca9c5e;
+                text-decoration: underline;
+                cursor: pointer;
+                font-size: 4vw; /* Decrease font size for the link */
+            }
+
+            h1 {
+                font-size: 6vw;
+            }
+
+        }
+    </style>
+<body>
+    <main>
+        <img src="{% static 'image/logo1.png' %}" alt="Queen Feast Logo" class="logo">
+        <h1>Registration</h1>
+        <form method="post" enctype="multipart/form-data" class="mt-4">
+            {% csrf_token %}
+            {% for field, error in form.errors.items %}
+            <div class="error-message">{{ error }}</div>
+            {% endfor %}
+            <label for="{{ form.username.id_for_label }}">Username:</label>
+            <input type="text" name="{{ form.username.name }}" id="{{ form.username.id_for_label }}" autocomplete="username" required>
+            <label for="{{ form.email.id_for_label }}">Email:</label>
+            {{ form.email }}
+            <label for="{{ form.password1.id_for_label }}">Password:</label>
+            <input type="password" name="{{ form.password1.name }}" id="{{ form.password1.id_for_label }}" autocomplete="new-password" required>
+            <label for="{{ form.password2.id_for_label }}">Confirm Password:</label>
+            {{ form.password2 }}
+            <label for="{{ form.profile_photo.id_for_label }}">Profile Photo:</label>
+            <input type="file" name="{{ form.profile_photo.name }}" id="{{ form.profile_photo.id_for_label }}" accept="image/*">            
+            <label for="{{ form.phone_number.id_for_label }}">Phone Number:</label>
+            {{ form.phone_number }}
+            <input type="submit" class="Register" value="Register">
+            <div class="signin">
+                Already have an account? <a href="{% url 'login' %}" class="signup-link">Login</a>
+            </div>
+        </form>
+    </main>
+    <img src="{% static 'image/login-bg.png' %}" alt="bg-image">
+</body>
+</html>

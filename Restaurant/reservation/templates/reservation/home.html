@@ -1,0 +1,275 @@
+{% extends 'reservation/base.html' %}
+
+{% load static %}
+
+
+{% block title %}Queen's Feast{% endblock %}
+
+{% block styles %}
+    {{ block.super }}
+    <style>
+
+        .full-screen-image {
+            width: 100vw;
+            height: 100vh; 
+            object-fit: cover;
+            border: 10px solid #ca9c5e;
+            box-sizing: border-box;
+        }
+
+        @media (max-width: 1023px) {
+            .full-screen-image{
+                border: 6px solid #ca9c5e;
+            }
+        }
+
+        .heading{
+            text-align: center;
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            margin-top: 30px;
+            animation: moveUp 1s ease-out;
+        }
+
+        @keyframes moveUp {
+            from {
+                transform: translate(-50%, 0);
+                opacity: 0;
+            }
+            to {
+                transform: translate(-50%, -50%);
+                opacity: 1;
+            }
+        }
+
+        .royal-tastes {
+            font-size: 18px; 
+            font-family: 'Roboto'; 
+            letter-spacing: .3px;
+            white-space: nowrap;
+        }
+
+        .reservation-heading {
+            font-size: 120px; 
+            font-family: 'Oswald';
+            font-weight: bold;
+            line-height: .8;
+            margin-bottom: 10px;
+            white-space: nowrap;
+        }
+
+        .regal-flavors {
+            font-size: 20px; 
+            font-family: 'Lato';
+            font-style: italic;
+            white-space: nowrap;
+        }
+
+        @media (max-width: 1023px) {
+            .royal-tastes{
+                font-size: 9px;
+            }
+            
+            .reservation-heading{
+                font-size: 60px;
+            }
+
+            .regal-flavors{
+                font-size: 10px;
+            }
+        }
+
+
+
+        .bottom-left-image,
+        .bottom-right-image {
+            position: absolute;
+            bottom: 0;
+            height: auto; /* Maintain aspect ratio */
+            margin: 10px; /* Add margin as needed */
+            width: 21%;
+            transform: translateY(50%);
+        }
+
+        .bottom-left-image {
+            left: -10px; /* Adjust the left positioning */
+            z-index: 1;
+        }
+
+        .bottom-right-image {
+            right: -10px; /* Adjust the right positioning */
+        }
+
+        @media (max-width: 1000px) {
+            .bottom-left-image,
+            .bottom-right-image {
+                width: 30%;
+            }
+
+        }
+
+        .s2 {
+            position: relative;
+            display: flex;
+        }
+
+        .home-restaurant {
+            margin-left: 10%; 
+            margin-top: 8%;
+            width: 30%;
+        }
+
+        .text-container {
+            position: absolute;
+            top: 30%;
+            left: 45%;
+            text-align: left;
+            color: #fff;
+            padding-right: 10%;
+            opacity: 0; /* Initially hidden */
+            transition: opacity 0.5s, transform 0.5s;
+        }
+
+        .text-container.active {
+            opacity: 1; /* Display when active class is added */
+            transform: translateX(0); /* Move to its original position */
+        }
+
+        .text-container .h2, .text-container .content {
+            opacity: 0;
+            transform: translateX(-50%);
+            transition: opacity 0.5s, transform 0.5s;
+        }
+
+        .text-container.active .h2, .text-container.active .content {
+            opacity: 1;
+            transform: translateX(0);
+        }
+
+        .h2 {
+            font-size: 22px;
+            font-family: 'Courier New', Courier, monospace;
+            margin-bottom: 2%;
+        }
+
+        .content {
+            font-size: 48px;
+            color: #ca9c5e; /* Golden color */
+            font-family: garamond;
+            font-weight: bold;
+        }
+
+        .divider1{
+            width: 70%;
+            margin-top: 10%;
+        }
+
+        @media (max-width: 1180px) {
+            .home-restaurant {
+                width: 40%;
+            }
+            .text-container{
+                top: 20%;
+                left: 55%
+            }
+
+            .h2{
+                font-size: 18px;
+            }
+            .content{
+                font-size: 38px;
+            }
+
+        }
+
+        @media (max-width: 800px) {
+
+            .h2{
+                font-size: 14px;
+            }
+            .content{
+                font-size: 25px;
+            }
+
+        }
+
+        @media (max-width: 500px) {
+            .s2 {
+                flex-direction: column; 
+                align-items: center; 
+            }
+            .home-restaurant {
+                margin-left: 0;
+                margin-right: 0;
+                padding:20px;
+                width: 90%;
+            }
+            .text-container{
+                top: 0;
+                left: 0;
+                padding: 10%;
+                position: static; 
+            }
+            .h2 {
+                font-size: 18px;
+            }
+
+            .content {
+                font-size: 38px;
+            }
+        }
+    </style>
+
+
+{% endblock %}
+
+{% block content %}
+<img src="{% static 'image/main5.jpg' %}" alt="Background Image" class="full-screen-image">
+<img src="{% static 'image/home-leaf-left.png' %}" class="bottom-left-image">
+<img src="{% static 'image/leaf-right.png' %}" class="bottom-right-image">
+
+
+<div class="heading">
+    <div class="royal-tastes">INDULGE IN ROYAL TASTES AT QUEEN'S FEAST</div>
+    <div class="reservation-heading">Taste The<br>Difference</div>
+    <div class="regal-flavors">
+        Savor regal flavors at Queen's Feast, where culinary excellence meets affordability.<br>
+        Indulge in a symphony of tastes that redefine the art of grilling.
+    </div>
+</div>
+
+<div class="s2" >
+    <img src="{% static 'image/home-restaurant.jpg' %}" alt="Additional Image" class="home-restaurant">
+    <div class="text-container">
+        <div class="h2">YOUR SPECIAL OCCASION DESTINATION</div>
+        <div class="content">The Queen's Feast is a premium taste that yearns to be savored, ground beef between your teeth</div>
+        <img src="{% static 'image/divider.png' %}" alt="Additional Image" class="divider1">
+    </div>
+</div>
+
+{% include 'reservation/online_reservation.html' %}
+
+{% endblock %}
+
+{% block scripts %}
+    {{ block.super }}
+    <script>
+        document.addEventListener("DOMContentLoaded", function () {
+            var textContainer = document.querySelector('.text-container');
+
+            var observer = new IntersectionObserver(function (entries, observer) {
+                entries.forEach(function (entry) {
+                    if (entry.isIntersecting) {
+                        textContainer.classList.add('active');
+                        observer.unobserve(entry.target);
+                    }
+                });
+            }, { threshold: 0.3 }); // Adjust the threshold as needed
+
+            observer.observe(textContainer);
+        });
+    </script>
+
+{% endblock %}

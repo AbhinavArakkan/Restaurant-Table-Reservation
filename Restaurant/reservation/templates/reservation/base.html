@@ -1,0 +1,444 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}Queen's Feast Restaurant{% endblock %}</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" integrity="sha384-eaMQRlZTRfT1gbQgci92rZUqVsNkAqVfLEOpOjlv7/a5g5/4JXfIjXL4N3w4pX86" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
+
+    {% block head %}
+    {% endblock %}
+
+    <style>
+        body {
+            font-family: 'Arial', sans-serif;
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            background-color: #0b1517;
+            color: #fff;
+            overflow-x: hidden;
+        }
+
+        body::-webkit-scrollbar {
+            display: none;
+        }
+
+        header {
+            position: fixed;
+            width: 100%;
+            padding: 1em;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            transition: background-color 0.3s ease; 
+            z-index: 998;
+        }
+
+        #logo img {
+            max-width: 250px; 
+            margin-left: 10px;
+        }
+
+        nav {
+            margin-top: 20px;
+            text-align: right;
+            display: flex; 
+        }
+
+        nav a {
+            color: #fff;
+            text-decoration: none;
+            padding: 1em;
+            margin: 0 1em;
+            letter-spacing: 1px;
+            font-weight: bold;
+            position: relative;
+            overflow: hidden;
+        }
+
+        nav a::before {
+            content: '';
+            position: absolute;
+            width: 100%;
+            height: 2px;
+            background-color: transparent;
+            transform: scaleX(0);
+            transform-origin: bottom right;
+            transition: transform 0.3s ease, background-color 0.3s ease;
+            bottom: 0;
+            left: 0;
+            z-index: -1; 
+        }
+
+        nav a:hover {
+            color: #ca9c5e; 
+        }
+
+        nav a:hover::before {
+            background-color: #ca9c5e; 
+            transform: scaleX(1);
+            transform-origin: bottom left;
+        }
+
+        nav a.active {
+            color: #ca9c5e;
+        }
+
+        nav a.active::before {
+            background-color: #ca9c5e;
+            transform: scaleX(1);
+            transform-origin: bottom left;
+        }
+
+        nav a#user-link::before {
+            display: none;
+        }
+
+        #user-image {
+            width: 45px;
+            height: 45px;
+            border-radius: 50%;
+            overflow: hidden;
+            position: relative;
+            margin-right: 50px;
+        }
+
+        #user-image:hover::before {
+            content: '';
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            border: 3px solid #ca9c5e; 
+            box-sizing: border-box;
+            border-radius: 50%;
+        }
+
+        #user-image img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .sidebar {
+            height: 100%;
+            width: 0;
+            position: fixed;
+            z-index: 1;
+            top: 0;
+            right: 0;
+            background-color: #0b1517;
+            overflow-x: hidden;
+            transition: 0.5s;
+            padding-top: 60px;
+            color: white;
+            z-index: 999;
+        }
+
+        .sidebar a {
+            padding: 8px 8px 8px 32px;
+            text-decoration: none;
+            font-size: 20px;
+            color: #818181;
+            display: block;
+            transition: 0.3s;
+            top: 0;
+        }
+
+        .sidebar a:first-child {
+            margin-bottom: 30px;
+            margin-top: -50px;
+        }
+
+        .sidebar a:hover {
+            color: #f1f1f1;
+        }
+
+        .sidebar .closebtn {
+            position: absolute;
+            top: 0;
+            left: 25px;
+            font-size: 36px;
+            margin-left: 50px;
+            z-index: 1000;
+        }
+
+        .overlay {
+            height: 100%;
+            width: 100%;
+            position: fixed;
+            top: 0;
+            left: 0;
+            background-color: rgba(0, 0, 0, 0.5);
+            display: none;
+        }
+
+        .home-button {
+            position: absolute;
+            top: 15px;
+            left: auto;
+            right: 30px;
+            background-color: transparent;
+            color: white;
+            padding: 15px;
+            border: none;
+            border-radius: 50%;
+            cursor: pointer;
+            text-align: center;
+            font-size: 24px;
+            text-decoration: none;
+            margin-right: 30px;
+            z-index: 1000;
+        }
+
+        .home-button.close {
+            display: none;
+        }
+
+        @media (max-width: 1023px) {
+            nav {
+                display: none;
+            }
+
+            #logo img {
+                max-width: 180px;
+                margin-top: -15px;
+                margin-left: 10px;
+            }
+
+        }
+
+        @media (min-width: 1024px) {
+            .home_button {
+                display: none;
+            }
+
+            #user-image {
+                margin-top: -15px;
+            }
+        }
+
+        footer {
+            display: flex;
+            background-color: #0b1517;
+            color: #fff;
+            width: 100%;
+            margin-top: 150px;
+        }
+        
+       .footer-section {
+            flex: 1;
+            text-align: center;
+        }
+
+        .divider {
+            width: 2px;
+            height: 200px;
+            background-color: #ca9c5e;
+            margin: 10px 10px;
+        }
+
+        .logo {
+            max-width: 350px;
+        }
+
+        .copyright {
+            font-size: 12px;
+        }
+
+        .footer-links {
+            margin-top: 25px;
+            text-align: center;
+            text-transform: uppercase; 
+        }
+
+        .footer-links a {
+            display: block;
+            color: #fff;
+            text-decoration: none;
+            padding: 12px;
+            transition: color 0.3s ease; 
+            font: small-caps bold 24px/1 sans-serif;
+            font-size: 18px;
+        }
+
+        .footer-links a:hover {
+            color: #ca9c5e; 
+        }
+
+        .footer-section p{
+            font-size: 12px;
+            text-align: left;
+            margin-top: 37px;
+            margin-left: 40px;
+        }
+
+        @media (max-width: 700px) {
+        footer {
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .divider {
+            width: 100px;
+            height: 2px;
+        }
+
+        .logo{
+            max-width: 250px;
+            margin-bottom: -30px;
+        }
+
+        .footer-links{
+            margin-top: 10px;
+            margin-bottom: 5px;
+        }
+
+        .footer-links a {
+            padding: 8px;
+            font-size: 16px;
+        }
+
+        .footer-section p {
+            text-align: center;
+            margin-top: 15px;
+            margin-left: 0;
+            margin-bottom: 80px;
+        }
+    }
+        
+    </style>
+
+    {% block styles %}
+    {% endblock %}
+
+
+</head>
+
+<body>
+
+    <header id="myHeader">
+        <div id="logo">
+            <img src="{% static 'image/logo.png' %}" alt="Queen’s Feast Logo" >
+        </div>
+        <nav>
+            <a href="{% url 'home' %}" class="{% if request.path == '/Queens_Feast/' or request.path == '/' %}active{% endif %}">Home</a>
+            <a href="{% url 'about' %}" class="{% if request.path == '/about/' %}active{% endif %}">About</a>
+            <a href="{% url 'menu' %}" class="{% if request.path == '/menu/' %}active{% endif %}">Menu</a>
+            {% if user.is_staff %}
+            {% else %}
+                <a href="{% url 'reservation' %}" class="{% if request.path == '/reservations/' %}active{% endif %}">Reservation</a>
+            {% endif %}
+            <a href="{% url 'contact' %}" class="{% if request.path == '/contact/' %}active{% endif %}">Contact</a>
+            <a href="{% url 'profile' %}" id="user-link">        
+                <div id="user-image">
+                    {% if user.is_authenticated %}
+                        <img src="{{ user_profile.profile_photo.url }}" alt="Profile Photo">
+                    {% else %}
+                        <img src="{% static 'image/profile-picture.png' %}" alt="profile-photo">
+                    {% endif %}
+                </div>
+            </a>
+        </nav>
+        <div class="home_button">
+            <a href="javascript:void(0)" class="home-button" id="openButton" onclick="openNav()">&#8801;</a>
+            <a href="javascript:void(0)" class="home-button close" id="closeButton" onclick="closeNav()">&#8801;</a>
+        </div>
+    </header>
+
+    <div id="mySidebar" class="sidebar">
+        <a href="{% url 'profile' %}">
+            <div id="user-image">
+                {% if user.is_authenticated %}
+                    <img src="{{ user_profile.profile_photo.url }}" alt="Profile Photo">
+                {% else %}
+                    <img src="{% static 'image/profile-picture.png' %}" alt="profile-photo">
+                {% endif %}
+            </div>
+        </a>
+        <a href="{% url 'home' %}" class="button">Home</a>
+        <a href="{% url 'about' %}" class="button">About</a>
+        <a href="{% url 'menu' %}" class="button">Menu</a>
+        <a href="{% url 'reservation' %}" class="button">Reservation</a>
+        <a href="{% url 'contact' %}" class="button">Contact</a>
+    </div>
+
+    <div class="overlay" onclick="closeNav()"></div>
+
+    <div id="content">
+        {% block content %}{% endblock %}
+    </div>
+
+    <footer>
+        <div class="footer-section">
+            <img src="{% static 'image/logo1.png' %}" alt="Queen Feast Logo" class="logo">
+        </div>
+        <div class="divider"></div>
+        <div class="footer-section">
+            <div class="footer-links">
+                <a href="{% url 'menu' %}">Our Menu</a>
+                <a href="{% url 'reservation' %}">Reservation</a>
+                <a href="{% url 'about' %}">About</a>
+                <a href="{% url 'contact' %}">Contact Us</a>
+            </div>
+        </div>
+        <div class="divider"></div>
+        <div class="footer-section">
+            <p>&copy; 2023 Queen's Feast Restaurant.<br>All rights reserved.</p>
+        </div>
+    </footer>
+
+    {% block scripts %}
+    {% endblock %}
+    
+    <script>
+        // Function to update header style on scroll
+        function updateHeaderStyle() {
+            var header = document.getElementById("myHeader");
+            var scrollY = window.scrollY || window.pageYOffset;
+    
+            if (scrollY > 150) {
+                header.style.height = "70px"; // Set the desired height when scrolling
+                header.style.backgroundColor = "rgba(2, 5, 8, 0.3)";
+                header.style.backdropFilter = "blur(10px)";
+            } else {
+                header.style.height = "100px"; // Set the original height when at the top
+                header.style.backgroundColor = "transparent";
+                header.style.backdropFilter = "none";
+            }
+        }
+    
+        // Add scroll event listener to update header style on scroll
+        window.addEventListener("scroll", updateHeaderStyle);
+    
+        // Call the function on page load
+        document.addEventListener("DOMContentLoaded", function () {
+            updateHeaderStyle();
+        });
+    
+        function openNav() {
+            document.getElementById("mySidebar").style.width = "250px";
+            document.getElementById("openButton").style.display = "none";
+            document.getElementById("closeButton").style.display = "block";
+            document.querySelector(".overlay").style.display = "block";
+        }
+    
+        function closeNav() {
+            document.getElementById("mySidebar").style.width = "0";
+            document.getElementById("openButton").style.display = "block";
+            document.getElementById("closeButton").style.display = "none";
+            document.querySelector(".overlay").style.display = "none";
+        }
+    </script>
+    
+
+
+</body>
+
+</html>

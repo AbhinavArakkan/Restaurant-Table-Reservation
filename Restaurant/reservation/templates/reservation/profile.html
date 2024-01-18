@@ -1,0 +1,1221 @@
+
+{% extends 'reservation/base.html' %}
+
+{% load static %}
+
+
+{% block title %}Profile{% endblock %}
+
+{% block styles %}
+  {{ block.super }}
+  <style>
+    .back-ground {
+      width: 100%;
+      height: 30vh; 
+      object-fit: cover;
+      background-image: url("{% static 'image/112.jpg' %}");
+      background-attachment: fixed;
+      background-position: center;
+      background-repeat: no-repeat;
+      background-size: cover;
+    }
+
+    .profile-img {
+      border-radius: 50%;
+      width: 150px;
+      height: 150px;
+      object-fit: cover;
+    }
+
+    .profile {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      position: relative;
+      top: -70px;
+    }
+
+    .username {
+      font-family: cursive, 'Times New Roman', serif;
+      font-size: 24px; 
+    }
+
+    .bookings {
+      display: flex;
+      gap: 20px; /* Adjust the gap between images as needed */
+      margin-top: 20px; /* Add margin to separate images from the username */
+    }
+
+    .bookings img {
+      width: 500px; /* Set the desired width for the images */
+      height: 500px; /* Set the desired height for the images */
+      object-fit: cover;
+    }
+
+    @media (max-width: 1244px){
+      .bookings img {
+        width: 250px;
+        height: 250px;
+      }
+    }
+
+    @media (max-width: 513px){
+      .bookings {
+        display:block;
+        gap: 50px; 
+        margin-top: 20px;
+      }
+      .bookings img {
+        width: 250px;
+        height: 250px;
+      }
+    }
+
+    .modal {
+      display: none;
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background-color: rgba(0, 0, 0, 0.7);
+      justify-content: center;
+      align-items: center;
+      z-index: 1000;
+    }
+
+    .modal-content {
+      background-color: #fefefe48;
+      padding: 20px;
+      text-align: center;
+      border-radius: 10px;
+      position: relative; /* Ensure relative positioning for absolute positioning of close button */
+    }
+
+    .modal-profile-img {
+      border-radius: 50%;
+      width: 200px; /* Adjust size as needed */
+      height: 200px; /* Adjust size as needed */
+      object-fit: cover;
+      margin-bottom: -20px;
+    }
+
+    .close {
+      position: absolute;
+      top: 10px;
+      right: 10px;
+      font-size: 30px;
+      cursor: pointer;
+    }
+
+    .logout-button {
+      text-decoration: none; /* Remove underline */
+      color: white; /* Set text color to white */
+      display: flex;
+      align-items: center;
+      justify-content: flex-end; /* Align to the right */
+      gap: 10px; /* Adjust the gap between text and icon */
+      margin-top: 15px; /* Add margin to separate the button from other content */
+    }
+
+    .logout-button i {
+      font-size: 16px; /* Adjust the size of the icon */
+    }
+
+    .camera-icon {
+      position: absolute;
+      bottom: 0;
+      right: 40px;
+      transform: translate(50%, 50%); /* Center the icon */
+      background-color: white; /* Optional: add a background color for contrast */
+      border-radius: 50%;
+      padding: 5px;
+      color: #333; /* Adjust the color of the icon */
+      font-size: 30px; /* Adjust the size of the icon */
+    }
+
+    /* Additional styling for the profile container */
+    .profile-container {
+      position: relative;
+      display: inline-block;
+    }
+
+    #upcomingReservationsModal {
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.7);
+    justify-content: center;
+    align-items: center;
+  }
+
+  #upcomingReservationsModal .modal-content {
+    background-color: rgba(255, 255, 255, 0.522);
+    padding: 20px;
+    text-align: center;
+    border-radius: 10px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.3);
+    max-height: 400px; /* Set the maximum height for the modal content */
+    overflow-y: auto; /* Enable vertical scrolling when content overflows the max height */
+  }
+
+  #upcomingReservationsModal .close {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    font-size: 30px;
+    cursor: pointer;
+    color: #333;
+  }
+
+  #upcomingReservationsModal h2 {
+    font-size: 24px;
+    color: #333;
+    margin-bottom: 15px;
+  }
+
+  #upcomingReservationsModal ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+  }
+
+  #upcomingReservationsModal li {
+    font-size: 16px;
+    color: #555;
+    margin-bottom: 10px;
+  }
+
+  #previousReservationsModal {
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.7);
+    justify-content: center;
+    align-items: center;
+  }
+
+  #previousReservationsModal .modal-content {
+    background-color: rgba(255, 255, 255, 0.522);
+    padding: 20px;
+    text-align: center;
+    border-radius: 10px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.3);
+    max-height: 400px; /* Set the maximum height for the modal content */
+    overflow-y: auto; /* Enable vertical scrolling when content overflows the max height */
+  }
+
+  #previousReservationsModal .close {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    font-size: 30px;
+    cursor: pointer;
+    color: #333;
+  }
+
+  #previousReservationsModal h2 {
+    font-size: 24px;
+    color: #333;
+    margin-bottom: 15px;
+  }
+
+  #previousReservationsModal ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+  }
+
+  #previousReservationsModal li {
+    font-size: 16px;
+    color: #555;
+    margin-bottom: 10px;
+    
+  }
+
+  .reservation-box {
+    border: 2px solid #ffffff;
+    padding: 10px;
+    margin-bottom: 10px;
+    background-color: #f9f9f947;
+  }
+
+  /* Add this style to style the mail and QR code buttons */
+  .reservation-box button {
+    margin-top: 10px;
+    padding: 5px 10px;
+    background-color: #4caf4f00; /* Green color, you can change it */
+    color: rgb(0, 0, 0);
+    border-radius: 4px;
+    cursor: pointer;
+  }
+
+  /* Add hover effect for buttons */
+  .reservation-box button:hover {
+    background-color: rgb(255, 255, 255);
+  }
+
+  .reservation-box p {
+    color: #080808; /* Change this to the desired font color */
+  }
+
+  #qrCodeModal .modal-content {
+    background-color: rgb(254, 254, 254);
+    width: 200px;
+  }
+
+  #qrCodeModal img {
+    width: 100%; 
+    height: auto;
+  }
+
+  #qrCodeModal .close {
+    top: 5px;
+    right: 10px;
+    font-size: 30px;
+    color: #333;
+  }
+
+  .details-section {
+    display: flex;
+    gap: 20px;
+    color: #ca9c5e;
+  }
+  .options-modal {
+    width: 30%; /* Adjust the width for options modal */
+    color: #ca9c5e; /* Set font color to red */
+  }
+  .details-modal {
+    width: 70%; /* Adjust the width for details modal */
+    max-height: 700px;
+    overflow-y: auto;
+    margin-top: -20px;
+  }
+
+  .food-list{
+    margin-top: 30px;
+    max-height: 500px;
+    overflow-y: auto;
+  }
+
+  .options-list {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+  }
+  .options-list li,.options-list button {
+      color:  #ca9c5e;
+      cursor: pointer;
+      font-size: auto;
+      width: 100px;
+      margin-left: 30px;
+      padding: 8px;
+      background-color: #f2f2f200;
+      margin-bottom: 5px;
+      border: 2px solid #ca9c5e;
+      border-radius: 10px;
+    }
+  .options-list li.active, .options-list button.active {
+    background-color: #ca9c5e; 
+    color: #ffffff;
+  }
+  .options-list li:hover, .options-list button:hover {
+    background-color: #ca9c5e;
+    color: white;
+  }
+  .details-box {
+    box-sizing: border-box;
+    padding: 15px;
+    border: 2px solid #ca9c5e;
+    border-radius: 5px;
+    background-color: #ffffff00; 
+    margin-bottom: 10px; 
+    width: 60%;
+    display: flexbox;
+    justify-content: space-between;
+  }
+
+  #searchBarContainer {
+    position: relative;
+    margin-left: 30px;
+    margin-bottom: 20px;
+    width: 200px;
+  }
+
+  .show-qr-button i {
+    font-size: 20px; /* Adjust the size of the icon */
+    color: #ca9c5e; /* Change the color of the icon */
+  }
+
+  #searchBar {
+    width: 100%;
+    padding: 8px;
+    box-sizing: border-box;
+    border: 2px solid #ca9c5e;
+    border-radius: 4px;
+    font-size: 16px;
+    background-color: rgba(255, 255, 255, 0);
+    color: #ffffff;
+    padding-left: 30px;
+  }
+
+  #searchIcon {
+    position: absolute;
+    left: 10px;
+    top: 50%;
+    transform: translateY(-50%);
+    color: #ca9c5e;
+  }
+  
+  @media (max-width: 1075px) {
+    .details-box {
+      width: 100%;
+    }
+
+    .options-modal {
+      width: 20%; /* Adjust the width for options modal */
+    }
+    .details-modal {
+      width: 80%; /* Adjust the width for details modal */
+    }
+
+    .food-list {
+      max-height: 400px;
+    }
+
+    .options-list li {
+      width: 80px;
+      font-size: 75%;
+    }
+    #searchBarContainer {
+      position: relative;
+      width: 100px;
+    }
+    #addFoodForm {
+      font-size: 14px;
+      padding: 10px;
+     margin-left: 40px;
+    }
+  }
+
+  .dropdown-container {
+    position: relative;
+    display: inline-block;
+  }
+
+  .dropdown-content {
+      display: none;
+      position: absolute;
+      box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
+      z-index: 1;
+  }
+
+  .dropdown-content button {
+      width: 100%;
+      text-align: left;
+      padding: 8px 12px;
+      border: none;
+      background: none;
+      cursor: pointer;
+  }
+
+  #timeDropdown {
+    max-height: 200px; /* Adjust the max height as needed */
+    overflow-x: hidden; /* Add a vertical scrollbar if needed */
+  }
+
+  #timeDropdown::-webkit-scrollbar {
+      display: none;
+  }
+  #timeDropdown button:hover {
+    background-color: rgba(0, 0, 0, 0);
+}
+
+  </style>
+
+{% endblock %}
+
+{% block content %}
+  <div class="back-ground"></div>
+  <div class="profile">
+    <img src="{{ user_profile.profile_photo.url }}" alt="Profile Photo" class="profile-img" id="profileImage">
+    <h2 class="username">{{ user_profile.user.username }}</h2>
+  </div>
+
+  <!-- Modal Box -->
+  <div class="modal" id="profileModal">
+    <div class="modal-content">
+      <span class="close" onclick="closeModal()">&times;</span>
+      <div class="profile-container">
+        <img src="{{ user_profile.profile_photo.url }}" alt="Profile Photo" class="modal-profile-img">
+        <i class="fas fa-camera camera-icon" onclick="openChangePhotoModal()"></i>
+      </div>
+      <h2 class="modal-username">{{ user_profile.user.username }}</h2>
+      <a href="{% url 'logout' %}" class="logout-button">Logout <i class="fa fa-sign-out"></i></a>
+    </div>
+  </div>
+
+  <div class="modal" id="changePhotoModal">
+    <div class="modal-content">
+        <span class="close" onclick="closeChangePhotoModal()">&times;</span>
+        <h2 class="modal-title">Change Profile Photo</h2>
+        
+        <form method="post" enctype="multipart/form-data">
+            {% csrf_token %}
+
+            <div class="form-group">
+                <label for="id_profile_photo" class="form-label">Choose a new profile photo:</label>
+                <input type="file" name="profile_photo" id="id_profile_photo" class="form-control-file"><br>
+                <small class="form-text text-muted">Select an image file (JPEG, PNG, or GIF) with a maximum size of 5 MB.</small>
+            </div>
+            
+            <button type="submit" class="btn btn-primary">Save changes</button>
+        </form>
+    </div>
+  </div>
+  {% if user.is_staff %}
+
+  <div class="details-section">
+    <div class="options-modal">
+      <div id="searchBarContainer">
+        <input type="text" id="searchBar" oninput="searchDetails()" placeholder="Search...">
+        <i id="searchIcon" class="fas fa-search"></i>
+      </div>   
+      <ul class="options-list">
+        <li id="addFoodOption" onclick="showAddFoodForm()">Add Food</li>
+        <li id="usersOption" onclick="showUserDetails()">Users</li>
+        <li id="reservationsOption" class="active" onclick="showReservationDetails()">Reservations</li>
+        <button id="prevSeats" onclick="scrollSeats(-1)"><</button>
+        <div id="seatsOptionContainer">
+          <button class="seat-option" onclick="selectSeats('Seats')">Seats</button>
+        </div>
+        <button id="nextSeats" onclick="scrollSeats(1)">></button>
+        <button id="dateOption">Date</button>
+        <div id="timeDropdownContainer" class="dropdown-container">
+          <button id="timeOption" onclick="toggleTimeDropdown()">Time</button>
+          <div id="timeDropdown" class="dropdown-content"></div>
+         </div> 
+      </ul>
+    </div>
+
+    <!-- Details Modal on the Right -->
+    <div class="details-modal">
+
+      <div id="addFoodForm" style="display: none;">
+        <h2>Add Food Item</h2>
+        <form method="post" action="{% url 'add_food_item' %}" id="addFoodForm">
+            {% csrf_token %}
+            <div class="form-group">
+                <label for="foodName">Food Name:</label>
+                <input type="text" name="food_name" id="foodName" required>
+            </div>
+            <button type="button" class="btn btn-primary" id="submitAddFoodForm">Add Food</button>
+        </form>
+        <h2>Food List</h2>
+        <button type="button" class="btn btn-danger" id="deleteSelected">
+          <i class="fas fa-trash-alt"></i>
+        </button>        
+        <div class="food-list">
+            <ul>
+            </ul>
+        </div>
+      </div>
+    
+
+      <!-- User Details -->
+      <div id="userDetails" style="display: none;">
+        <ul>
+          {% for user_profile in user_profiles %}
+            <div class="details-box">
+              <p>{{ user_profile.user.username }}</p>
+              <p>Email: {{ user_profile.user.email }}</p>
+              <p>Phone Number: {{ user_profile.phone_number }}</p>
+              <!-- Add other user profile details as needed -->
+            </div>
+          {% endfor %}
+        </ul>
+      </div>
+
+      <!-- Reservation Details -->
+      <div id="reservationDetails" style="display: none;">
+        <ul id="reservationsList">
+            <!-- Reservation details will be dynamically added here using JavaScript -->
+        </ul>
+    </div>
+    
+    </div>
+  </div>
+
+  <div class="modal" id="qrCodeModal">
+    <div class="modal-content">
+        <span class="close" onclick="closeQRCodeModal()">&times;</span>
+        <img id="qrCodeImage" alt="QR Code">
+    </div>
+  </div>
+
+  {% else %}
+    <div class="profile">
+      <div class="bookings">
+        <img src="{% static 'image/upcoming-bookings.png' %}" alt="upcoming-booking" onclick="openUpcomingBookingsModal()">
+        <img src="{% static 'image/previous-booking.png' %}" alt="previous-booking" onclick="openPreviousBookingsModal()">
+      </div>
+    </div>
+    <!-- Modal Box for Upcoming Reservations -->
+    <div class="modal" id="upcomingReservationsModal">
+      <div class="modal-content">
+        <span class="close" onclick="closeUpcomingBookingsModal()">&times;</span>
+        <h2>Upcoming Reservations</h2>
+        <ul id="upcomingReservationsList"></ul>
+      </div>
+    </div>
+
+    <!-- Modal Box for Previous Reservations -->
+    <div class="modal" id="previousReservationsModal">
+      <div class="modal-content">
+        <span class="close" onclick="closePreviousBookingsModal()">&times;</span>
+        <h2>Previous Reservations</h2>
+        <ul id="previousReservationsList"></ul>
+      </div>
+    </div>
+
+    <div class="modal" id="qrCodeModal">
+      <div class="modal-content">
+          <span class="close" onclick="closeQRCodeModal()">&times;</span>
+          <img id="qrCodeImage" alt="QR Code">
+      </div>
+    </div>
+    
+    {% include 'reservation/online_reservation.html' %}
+
+  {% endif %}
+
+{% endblock %}
+
+
+{% block scripts %}
+    {{ block.super }}
+    <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
+    <script>
+
+      // Function to open the modal
+      function openModal() {
+        document.getElementById('profileModal').style.display = 'flex';
+      }
+  
+      // Function to close the modal
+      function closeModal() {
+        document.getElementById('profileModal').style.display = 'none';
+      }
+
+      // Attach the click event to the profile image
+      document.getElementById('profileImage').addEventListener('click', openModal);
+  
+      // Attach the click event to close the modal when clicking outside of it
+      window.addEventListener('click', function(event) {
+        var modal = document.getElementById('profileModal');
+        if (event.target == modal) {
+          closeModal();
+        }
+      });
+
+      function openChangePhotoModal() {
+        closeModal(); // Close the profile modal before opening the new one
+        document.getElementById('changePhotoModal').style.display = 'flex';
+      }
+
+      // Function to close the modal for changing profile photo
+      function closeChangePhotoModal() {
+        document.getElementById('changePhotoModal').style.display = 'none';
+      }
+
+      // Function to open the modal for upcoming reservations
+      function openUpcomingBookingsModal() {
+        fetch('/reservation/get_upcoming_reservations/')
+          .then(response => response.json())
+          .then(data => {
+            const upcomingReservationsList = document.getElementById('upcomingReservationsList');
+            upcomingReservationsList.innerHTML = '';
+
+            data.upcoming_reservations.forEach(reservation => {
+              const reservationContainer = document.createElement('div');
+              reservationContainer.classList.add('reservation-box');
+
+              // Convert 24-hour time to 12-hour format
+              const [hours, minutes] = reservation.reservation_time.split(':');
+              const ampm = hours >= 12 ? 'PM' : 'AM';
+              const formattedTime = `${(hours % 12) || 12}:${minutes} ${ampm}`;
+
+              // Convert the date to the desired format: day-month-year
+              const parsedDate = new Date(reservation.reservation_date);
+              const day = parsedDate.getDate();
+              const month = parsedDate.getMonth() + 1; // Months are 0-indexed
+              const year = parsedDate.getFullYear();
+
+              const formattedDate = `${day}-${month}-${year}`;
+
+              reservationContainer.innerHTML = `
+                <p>Date: ${formattedDate}, Time: ${formattedTime}, Seats: ${reservation.seats}, Starter: ${reservation.menu}  </p>
+                <button class="mail-button" onclick="sendReservationDetails('${reservation.seats}', '${formattedDate}', '${formattedTime}', '${reservation.qr_code}')">
+                  <i class="fa fa-envelope"></i></button>
+                <button class="qr-button" onclick="showQRCode('${reservation.qr_code}')">
+                  <i class="fa fa-qrcode"></i></button> `;
+              upcomingReservationsList.appendChild(reservationContainer);
+            });
+          })
+          .catch(error => console.error('Error fetching upcoming reservations:', error));
+
+        document.getElementById('upcomingReservationsModal').style.display = 'flex';
+      }
+
+      function closeUpcomingBookingsModal() {
+        document.getElementById('upcomingReservationsModal').style.display = 'none';
+      }
+
+      // Attach an event listener to close the upcoming reservations modal when clicking outside of it
+      window.addEventListener('click', function(event) {
+        var modal = document.getElementById('upcomingReservationsModal');
+        if (event.target == modal) {
+          closeUpcomingBookingsModal();
+        }
+      });
+
+      // Function to open the modal for previous reservations
+      function openPreviousBookingsModal() {
+        fetch('/reservation/get_previous_reservations/')
+          .then(response => response.json())
+          .then(data => {
+            const previousReservationsList = document.getElementById('previousReservationsList');
+            previousReservationsList.innerHTML = '';
+
+            data.previous_reservations.forEach(reservation => {
+              const reservationContainer = document.createElement('div');
+              reservationContainer.classList.add('reservation-box');
+
+              // Convert 24-hour time to 12-hour format
+              const [hours, minutes] = reservation.reservation_time.split(':');
+              const ampm = hours >= 12 ? 'PM' : 'AM';
+              const formattedTime = `${(hours % 12) || 12}:${minutes} ${ampm}`;
+
+              // Convert the date to the desired format: day-month-year
+              const parsedDate = new Date(reservation.reservation_date);
+              const day = parsedDate.getDate();
+              const month = parsedDate.getMonth() + 1; // Months are 0-indexed
+              const year = parsedDate.getFullYear();
+
+              const formattedDate = `${day}-${month}-${year}`;
+
+              reservationContainer.innerHTML = `
+                <p>Date: ${formattedDate}, Time: ${formattedTime}, Seats: ${reservation.seats}  </p>
+                <button class="mail-button" onclick="sendReservationDetails('${reservation.seats}', '${formattedDate}', '${formattedTime}', '${reservation.qr_code}')">
+                  <i class="fa fa-envelope"></i></button>
+                <button class="qr-button" onclick="showQRCode('${reservation.qr_code}')">
+                  <i class="fa fa-qrcode"></i></button> `;
+              previousReservationsList.appendChild(reservationContainer);
+            });
+          })
+          .catch(error => console.error('Error fetching previous reservations:', error));
+
+        document.getElementById('previousReservationsModal').style.display = 'flex';
+      }
+
+      function closePreviousBookingsModal() {
+        document.getElementById('previousReservationsModal').style.display = 'none';
+      }
+
+      // Attach an event listener to close the upcoming reservations modal when clicking outside of it
+      window.addEventListener('click', function(event) {
+        var modal = document.getElementById('previousReservationsModal');
+        if (event.target == modal) {
+          closePreviousBookingsModal();
+        }
+      });
+
+      function sendReservationDetails(seats, date, time, qrCode) {
+          // Make an AJAX request to send reservation details to the server
+          $.ajax({
+              url: '/reservation/send_reservation_email/',
+              method: 'POST',
+              data: {
+                  seats: seats,
+                  date: date,
+                  time: time,
+                  qrCode: qrCode,
+                  csrfmiddlewaretoken: '{{ csrf_token }}'  // Include CSRF token if required
+              },
+              success: function (data) {
+                  // Handle the success response from the server
+                  console.log('Email sent successfully:', data);
+                  // You might want to show a success message or update the UI
+              },
+              error: function (error) {
+                  // Handle the error response from the server
+                  console.error('Error sending email:', error);
+              }
+          });
+      }
+
+      function showQRCode(qrCodeUrl) {
+          const qrCodeModal = document.getElementById('qrCodeModal');
+          const qrCodeImage = document.getElementById('qrCodeImage');
+
+          // Set the QR code image source
+          qrCodeImage.src = qrCodeUrl;
+
+          // Display the modal
+          qrCodeModal.style.display = 'flex';
+      }
+
+
+      function closeQRCodeModal() {
+        document.getElementById('qrCodeModal').style.display = 'none';
+      }
+
+      window.addEventListener('click', function(event) {
+        var modal = document.getElementById('qrCodeModal');
+        if (event.target == modal) {
+          closeQRCodeModal();
+        }
+      });
+
+      function showUserDetails() {
+        document.getElementById('userDetails').style.display = 'block';
+        document.getElementById('reservationDetails').style.display = 'none';
+        document.getElementById('usersOption').classList.add('active');
+        document.getElementById('reservationsOption').classList.remove('active');
+        document.getElementById('addFoodOption').classList.remove('active');
+        document.getElementById('addFoodForm').style.display = 'none';
+      }
+      function showReservationDetails() {
+        document.getElementById('userDetails').style.display = 'none';
+        document.getElementById('reservationDetails').style.display = 'block';
+        document.getElementById('reservationsOption').classList.add('active');
+        document.getElementById('usersOption').classList.remove('active');
+        document.getElementById('addFoodOption').classList.remove('active');
+        document.getElementById('addFoodForm').style.display = 'none';
+
+      }    
+
+      document.addEventListener('DOMContentLoaded', function () {
+        showReservationDetails();
+      });
+
+      function searchDetails() {
+        var input, filter, userUl, reservationUl, userLi, reservationLi, i, userTxtValue, reservationTxtValue;
+        input = document.getElementById('searchBar');
+        filter = input.value.toUpperCase();
+        userUl = document.getElementById('userDetails'); // Adjust this based on the actual ID of your user details container
+        reservationUl = document.getElementById('reservationDetails'); // Adjust this based on the actual ID of your reservation details container
+
+        // Search in user details
+        userLi = userUl.getElementsByClassName('details-box');
+        for (i = 0; i < userLi.length; i++) {
+          userTxtValue = userLi[i].textContent || userLi[i].innerText;
+          if (userTxtValue.toUpperCase().indexOf(filter) > -1) {
+            userLi[i].style.display = '';
+          } else {
+            userLi[i].style.display = 'none';
+          }
+        }
+
+        // Search in reservation details
+        reservationLi = reservationUl.getElementsByClassName('details-box');
+        for (i = 0; i < reservationLi.length; i++) {
+          reservationTxtValue = reservationLi[i].textContent || reservationLi[i].innerText;
+          if (reservationTxtValue.toUpperCase().indexOf(filter) > -1) {
+            reservationLi[i].style.display = '';
+          } else {
+            reservationLi[i].style.display = 'none';
+          }
+        }
+      }
+
+      function showQRCodeModal(qrCodeUrl) {
+          const qrCodeModal = document.getElementById('qrCodeModal');
+          const qrCodeImage = document.getElementById('qrCodeImage');
+
+          // Set the QR code image source
+          qrCodeImage.src = qrCodeUrl;
+
+          // Display the modal
+          qrCodeModal.style.display = 'flex';
+      }
+
+      
+      document.addEventListener('DOMContentLoaded', function () {
+        // Initialize the selected option
+        let selectedOption = 'reservations';
+
+        function handleOptionSelection(option) {
+            selectedOption = option;
+
+            // Toggle visibility of additional options based on the selected option
+            const seatsOptionContainer = document.getElementById('seatsOptionContainer');
+            const dateOption = document.getElementById('dateOption');
+            const timeOption = document.getElementById('timeOption');
+            const prevSeatsButton = document.getElementById('prevSeats');
+            const nextSeatsButton = document.getElementById('nextSeats');
+
+            if (selectedOption === 'users' || selectedOption === 'addfood') {
+                seatsOptionContainer.style.display = 'none';
+                dateOption.style.display = 'none';
+                timeOption.style.display = 'none';
+                prevSeatsButton.style.display = 'none';
+                nextSeatsButton.style.display = 'none';
+            } else {
+                seatsOptionContainer.style.display = 'block';
+                dateOption.style.display = 'block';
+                timeOption.style.display = 'block';
+                prevSeatsButton.style.display = 'block';
+                nextSeatsButton.style.display = 'block';
+            }
+        }
+
+        // Attach click event listeners to the options
+        document.getElementById('usersOption').addEventListener('click', function () {
+          handleOptionSelection('users');
+        });
+
+        document.getElementById('reservationsOption').addEventListener('click', function () {
+          handleOptionSelection('reservations');
+        });
+
+        document.getElementById('addFoodOption').addEventListener('click', function () {
+          handleOptionSelection('addfood');
+        });
+
+        // Initial setup
+        handleOptionSelection(selectedOption);
+
+
+      });
+
+      const seatOptions = [2, 4, 6, 8];
+      let currentSeatIndex = -1; // Start with -1 to show "Seats" initially
+
+      function updateSeatButtons() {
+        const seatsOptionContainer = document.getElementById('seatsOptionContainer');
+        seatsOptionContainer.innerHTML = '';
+
+        const currentSeat = currentSeatIndex >= 0 ? seatOptions[currentSeatIndex] : 'Seats';
+        const seatButton = document.createElement('button');
+        seatButton.classList.add('seat-option');
+        seatButton.textContent = currentSeat;
+        seatButton.onclick = function () {
+          selectSeats(currentSeat);
+        };
+
+        seatsOptionContainer.appendChild(seatButton);
+      }
+
+      function scrollSeats(direction) {
+        currentSeatIndex += direction;
+
+        // Ensure the index stays within bounds
+        if (currentSeatIndex < 0) {
+          currentSeatIndex = seatOptions.length - 1;
+        } else if (currentSeatIndex >= seatOptions.length) {
+          currentSeatIndex = 0;
+        }
+
+        // Update the seat buttons
+        updateSeatButtons();
+
+        // Automatically trigger the search based on the selected seats
+        selectSeats(seatOptions[currentSeatIndex]);
+      }
+
+      // Initially update the seat buttons
+      updateSeatButtons();
+
+      let selectedSeats = null;
+      let selectedDate = null;
+      let selectedTime = null;
+
+      function selectSeats(seats) {
+          selectedSeats = seats;
+          updateFilters();
+      }
+
+
+      document.addEventListener('DOMContentLoaded', function () {
+          // Initialize flatpickr on the date button
+          const dateOptionButton = document.getElementById('dateOption');
+          flatpickr(dateOptionButton, {
+              enableTime: false, // Adjust options based on your requirements
+              dateFormat: "Y-m-d", // Adjust the date format as needed
+              onClose: function (selectedDates, dateStr, instance) {
+                  // Update the button text with the selected date
+                  dateOptionButton.textContent = dateStr;
+
+                  // Update the date filter and send all filters to the server
+                  selectedDate = dateStr;
+                  updateFilters();
+              },
+              appendTo: dateOptionButton.parentNode, // Append the calendar to the date button's parent
+              disableMobile: true
+          });
+      });
+
+
+
+      // Function to toggle the visibility of the time dropdown
+      function toggleTimeDropdown() {
+          const timeDropdown = document.getElementById('timeDropdown');
+          timeDropdown.style.display = (timeDropdown.style.display === 'block') ? 'none' : 'block';
+      }
+
+      // Function to populate and display the time choices dropdown
+      function showTimeChoices() {
+          const timeDropdownContainer = document.getElementById('timeDropdown');
+          timeDropdownContainer.innerHTML = ''; // Clear previous choices
+
+          // Assuming timeChoices is an array of time choices
+          const timeChoices = [
+                ['17:00', '5:00 PM'],
+                ['17:30', '5:30 PM'],
+                ['18:00', '6:00 PM'],
+                ['18:30', '6:30 PM'],
+                ['19:00', '7:00 PM'],
+                ['19:30', '7:30 PM'],
+                ['20:00', '8:00 PM'],
+                ['20:30', '8:30 PM'],
+                ['21:00', '9:00 PM'],
+                ['21:30', '9:30 PM'],
+                ['22:00', '10:00 PM'],
+                ['22:30', '10:30 PM'],
+                ['23:00', '11:00 PM'],
+                ['23:30', '11:30 PM'],
+            ];
+
+          timeChoices.forEach(([timeValue, timeDisplay]) => {
+              const choiceButton = document.createElement('button');
+              choiceButton.textContent = timeDisplay;
+              choiceButton.onclick = function () {
+                  selectTime(timeValue);
+              };
+
+              timeDropdownContainer.appendChild(choiceButton);
+          });
+
+          // Display the time choices dropdown
+          timeDropdownContainer.style.display = 'block';
+      }
+
+      // Function to handle the selection of a time choice
+      function selectTime(time) {
+          selectedTime = time;
+          updateFilters();
+          document.getElementById('timeOption').textContent = formatTime(selectedTime);
+          document.getElementById('timeDropdown').style.display = 'none';
+      }
+
+      // Attach the showTimeChoices function to the Time button
+      document.getElementById('timeOption').addEventListener('click', showTimeChoices);
+
+      function displayReservations(reservationsData) {
+          const reservationsList = document.getElementById('reservationsList');
+
+          // Clear existing content
+          reservationsList.innerHTML = '';
+
+          reservationsData.forEach(reservation => {
+              const detailsBox = document.createElement('div');
+              detailsBox.classList.add('details-box');
+
+              const detailsContent = document.createElement('div');
+              detailsContent.classList.add('details-content');
+
+              // Format date and time as needed
+              const formattedDate = formatDate(reservation.reservation_date);
+              const formattedTime = formatTime(reservation.reservation_time);
+
+              detailsContent.innerHTML = `
+                  <p>${reservation.user.username}</p>
+                  <p>Seats: ${reservation.seats}, Date: ${formattedDate}, Time: ${formattedTime}, Starter: ${reservation.starter}, Special Request: ${reservation.special_request}</p>
+              `;
+
+              const buttonContainer = document.createElement('div');
+              buttonContainer.classList.add('button-container');
+
+              const showQRButton = document.createElement('button');
+              showQRButton.classList.add('show-qr-button');
+              showQRButton.innerHTML = '<i class="fa fa-qrcode"></i>';
+              showQRButton.addEventListener('click', () => showQRCodeModal(reservation.qr_code.url));
+
+              buttonContainer.appendChild(showQRButton);
+
+              detailsBox.appendChild(detailsContent);
+              detailsBox.appendChild(buttonContainer);
+
+              reservationsList.appendChild(detailsBox);
+          });
+
+          // Show the reservations section
+          document.getElementById('reservationDetails').style.display = 'block';
+      }
+
+      // Format date as "DD/MM/YYYY"
+      function formatDate(dateString) {
+          const date = new Date(dateString);
+
+          const day = date.getDate().toString().padStart(2, '0');
+          const month = (date.getMonth() + 1).toString().padStart(2, '0');
+          const year = date.getFullYear();
+
+          return `${day}/${month}/${year}`;
+      }
+
+      // Format time as "HH:mm AM/PM"
+      function formatTime(timeString) {
+          const time = new Date(`2000-01-01T${timeString}`);
+          return time.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+      }
+
+      // Fetch reservations asynchronously (assuming reservationsData is fetched from the server)
+      fetch('/reservation/get_reservations/')
+          .then(response => response.json())
+          .then(data => {
+              const reservationsData = data.reservations;
+              displayReservations(reservationsData);
+          })
+          .catch(error => console.error('Error fetching reservations:', error));
+
+      function updateFilters() {
+          // Make an AJAX request to the server with all selected filters
+          $.ajax({
+              url: '/reservation/get_reservations/',
+              method: 'POST',
+              data: {
+                  selected_seats: selectedSeats,
+                  selected_date: selectedDate,
+                  selected_time: selectedTime,
+                  csrfmiddlewaretoken: '{{ csrf_token }}'
+              },
+              success: function (data) {
+                  console.log('Server response:', data);
+                  displayReservations(data.reservations);
+              },
+              error: function (error) {
+                  console.error('Error:', error);
+              }
+          });
+      }
+
+
+      function showAddFoodForm() {
+          // Hide other modal content
+          document.getElementById('reservationDetails').style.display = 'none';
+          document.getElementById('userDetails').style.display = 'none';
+          document.getElementById('addFoodForm').style.display = 'block';
+          document.getElementById('addFoodOption').classList.add('active');
+          document.getElementById('usersOption').classList.remove('active');
+          document.getElementById('reservationsOption').classList.remove('active');
+
+          $('#addFoodForm').show();
+
+          // Attach a click event handler to the submit button
+          $('#submitAddFoodForm').click(function () {
+              // Get the value of the food name input
+              var foodNameValue = $('#foodName').val().trim();
+
+              // Check if the food name is not blank
+              if (foodNameValue !== '') {
+                  var formData = $('#addFoodForm form').serialize();
+
+                  $.ajax({
+                      type: 'POST',
+                      url: '{% url "add_food_item" %}',
+                      data: formData,
+                      success: function (data) {
+                          console.log('Food item added successfully:', data);
+
+                          // Clear the input box
+                          $('#foodName').val('');
+
+                          // Update the form and food list
+                          $('#addFoodForm form')[0].reset();  // Reset the form
+
+                          // Refresh the food list dynamically
+                          fetchAndDisplayFoodItems();
+                      },
+                      error: function (error) {
+                          console.error('Error adding food item:', error);
+                      }
+                  });
+              } else {
+                  // Handle the case where the food name is blank (optional)
+                  console.log('Please enter a non-blank food name.');
+              }
+          });
+      }
+
+
+
+          // Function to fetch and display food items
+          function fetchAndDisplayFoodItems() {
+              $.ajax({
+                  url: "{% url 'fetch_food_items' %}",  // Replace 'fetch_food_items' with the actual URL to fetch food items
+                  type: "GET",
+                  dataType: "json",
+                  success: function (data) {
+                      // Update the food list with the fetched items
+                      var foodList = $(".food-list ul");
+                      foodList.empty();  // Clear existing items
+
+                      // Populate the list with the fetched items
+                      $.each(data, function (index, foodItem) {
+                          var checkboxId = "checkbox_" + index;
+                          foodList.append('<li><input type="checkbox" id="' + checkboxId + '">' + foodItem + '</li>');
+                      });
+                  },
+                  error: function (error) {
+                      console.error("Error fetching food items:", error);
+                  }
+              });
+          }
+
+          // Initial fetch and display of food items
+          fetchAndDisplayFoodItems();
+
+          // Event listener for the "Delete Selected" button
+          $("#deleteSelected").click(function () {
+              var selectedFoodItems = [];
+
+              // Iterate over selected checkboxes
+              $("input[type='checkbox']:checked").each(function () {
+                  // Get the corresponding food item text
+                  var foodItemText = $(this).parent().text().trim();
+                  selectedFoodItems.push(foodItemText);
+              });
+
+              // Send selected food items to the server
+              $.ajax({
+                  url: "{% url 'delete_selected_food_items' %}",
+                  type: "POST",
+                  dataType: "json",
+                  data: { selectedFoodItems: selectedFoodItems },
+                  success: function (response) {
+                      // Handle the server response, if needed
+                      console.log("Selected food items deleted successfully");
+                      // Refresh the food items list after deletion
+                      fetchAndDisplayFoodItems();
+                  },
+                  error: function (error) {
+                      console.error("Error deleting selected food items:", error);
+                  }
+              });
+          });
+
+
+    </script>
+
+{% endblock %}

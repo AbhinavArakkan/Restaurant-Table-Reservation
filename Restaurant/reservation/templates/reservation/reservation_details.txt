@@ -1,0 +1,10 @@
+Hai {{name|safe}}, You're Reservation Details!
+
+    Date: {{date|safe}}
+    Time: {{time|safe}}
+    Seats: {{seats|safe}}
+
+Thank you for choosing Queen's Feast!
+
+Best regards,
+The Queen's Feast Team

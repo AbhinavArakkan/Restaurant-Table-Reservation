@@ -1,0 +1,105 @@
+{% extends 'reservation/base.html' %}
+
+{% load static %}
+
+
+{% block title %}Queen's Feast{% endblock %}
+
+{% block styles %}
+    {{ block.super }}
+    <style>
+        .full-screen-image {
+            width: 100%;
+            height: 100vh; 
+            object-fit: cover;
+            border: 10px solid #ca9c5e;
+            box-sizing: border-box;
+        }
+
+        @media (max-width: 1023px) {
+            .full-screen-image{
+                border: 6px solid #ca9c5e;
+            }
+        }
+
+        .heading{
+            text-align: center;
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            white-space: nowrap;
+            animation: moveUp 1s ease-out;
+        }
+
+        @keyframes moveUp {
+            from {
+                transform: translate(-50%, 0);
+                opacity: 0;
+            }
+            to {
+                transform: translate(-50%, -50%);
+                opacity: 1;
+            }
+        }
+        
+        .royal-tastes {
+            font-size: 18px; 
+            font-family: 'Roboto'; 
+            letter-spacing: .3px;
+        }
+
+        .reservation-heading {
+            font-size: 120px; 
+            font-family: 'Oswald';
+            font-weight: bold;
+            line-height: .8;
+            margin-bottom: 10px;
+            white-space: nowrap;
+        }
+
+        .regal-flavors {
+            font-size: 20px; 
+            font-family: 'Lato';
+            font-style: italic;
+        }
+
+        @media (max-width: 1023px) {
+            .royal-tastes{
+                font-size: 9px;
+            }
+            
+            .reservation-heading{
+                font-size: 60px;
+            }
+
+            .regal-flavors{
+                font-size: 10px;
+            }
+        }
+
+    </style>
+
+
+{% endblock %}
+
+{% block content %}
+<img src="{% static 'image/main1.png' %}" alt="Background Image" class="full-screen-image">
+
+<div class="heading">
+    <div class="royal-tastes">INDULGE IN ROYAL TASTES AT QUEEN'S FEAST</div>
+    <div class="reservation-heading">Taste The<br>Difference</div>
+    <div class="regal-flavors">
+        Savor regal flavors at Queen's Feast, where culinary excellence meets affordability.<br>
+        Indulge in a symphony of tastes that redefine the art of grilling.
+    </div>
+</div>
+
+{% include 'reservation/online_reservation.html' %}
+
+{% endblock %}
+
+{% block scripts %}
+    {{ block.super }}
+
+{% endblock %}

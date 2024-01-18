@@ -1,0 +1,18 @@
+Dear {{name|safe}},
+
+Thank you for choosing Queen's Feast! We are delighted to confirm your reservation.
+
+Reservation Details:
+
+    Date: {{date|date:"F j, Y"|safe}}
+    Time: {{time|safe}}
+    Seats: {{seats|safe}}
+    
+
+
+We look forward to welcoming you on {{date|safe}}. If you have any questions or need to make changes to your reservation, please feel free to contact us.
+
+Thank you again for choosing Queen's Feast. We hope you have a delightful dining experience!
+
+Best regards,
+The Queen's Feast Team
